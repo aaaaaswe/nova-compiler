@@ -1,0 +1,40 @@
+; Test: Fibonacci Sequence
+; Computes fib(10) = 55 using iteration
+
+func @fibonacci(n: i64) -> i64 @callconv(nova) {
+    entry:
+        ; Check if n <= 1
+        %0, %f0 = subi i64 %n, 2
+        %is_small = test_lt %f0
+        %1, %f1 = addi i64 0, 1
+        br_cond %is_small, return_one, compute
+
+    return_one:
+        ret i64 %n
+
+    compute:
+        ; a = 0, b = 1
+        %a_init, %f_init = addi i64 0, 0
+        %b_init, %f_binit = addi i64 0, 1
+        %2, %f2 = addi i64 0, 0
+        br loop
+
+    loop:
+        %a = phi i64 [%a_init, compute], [%b, loop_body]
+        %b = phi i64 [%b_init, compute], [%next, loop_body]
+        %i = phi i64 [%2, compute], [%next_i, loop_body]
+
+        ; Check if i >= n
+        %next_i, %f_nexti = addi i64 %i, 1
+        %cmp, %f_cmp = sub i64 %next_i, %n
+        %is_done = test_ge %f_cmp
+        br_cond %is_done, done, loop_body
+
+    loop_body:
+        ; next = a + b
+        %next, %f_next = add i64 %a, %b
+        br loop
+
+    done:
+        ret i64 %b
+}

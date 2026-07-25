@@ -1,0 +1,29 @@
+[workspace]
+resolver = "2"
+members = [
+    "nova-nir",
+    "nova-asm",
+    "nova-sim",
+    "nova-codegen",
+    "nova-frontend",
+    "nova-hir",
+    "nova-mir",
+    "nova-link",
+    "nova-ffi",
+    "nova-driver",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["aaaaaswe"]
+repository = "https://github.com/aaaaaswe/nova-compiler"
+
+[workspace.dependencies]
+thiserror = "2"
+logos = "0.15"
+ariadne = "0.5"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"

@@ -1,0 +1,23 @@
+[package]
+name = "nova-driver"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "novac"
+path = "src/main.rs"
+
+[dependencies]
+nova-nir = { path = "../nova-nir" }
+nova-asm = { path = "../nova-asm" }
+nova-sim = { path = "../nova-sim" }
+nova-codegen = { path = "../nova-codegen" }
+nova-frontend = { path = "../nova-frontend" }
+nova-hir = { path = "../nova-hir" }
+nova-mir = { path = "../nova-mir" }
+nova-link = { path = "../nova-link" }
+nova-ffi = { path = "../nova-ffi" }
+clap.workspace = true
+thiserror.workspace = true

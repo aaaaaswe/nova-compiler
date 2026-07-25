@@ -1,0 +1,46 @@
+; Test: Composite and Stack Operations
+; Tests mem_add, mem_sub, mem_xchg, push, pop, enter, leave
+
+global @counter : i64 = 100
+
+func @test_composite() -> i64 @callconv(nova) {
+    entry:
+        ; Test mem_add (counter += 50)
+        %0, %f0 = addi i64 0, 50
+        mem_add [@counter], %0
+        ; counter = 150
+
+        ; Test mem_sub (counter -= 30)
+        %1, %f1 = addi i64 0, 30
+        mem_sub [@counter], %1
+        ; counter = 120
+
+        ; Test load counter
+        %2 = load i64 [@counter]
+
+        ; Test mem_xchg
+        %3, %f3 = addi i64 0, 999
+        %4 = mem_xchg [@counter], %3
+        ; %4 = 120 (old value), counter = 999
+
+        ; Test push and pop
+        push i64 %4
+        push i64 %2
+        %5 = pop i64
+        ; %5 = 120 (was %2)
+        %6 = pop i64
+        ; %6 = 120 (was %4)
+
+        ; Test enter and leave
+        enter 32
+        ; ... do some work ...
+        %7, %f7 = addi i64 %6, 1
+        ; %7 = 121
+        store i64 %7, [@counter]
+        leave
+
+        ; Final result
+        %8 = load i64 [@counter]
+        ; %8 = 121
+        ret i64 %8
+}

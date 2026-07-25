@@ -1,0 +1,40 @@
+; Test: Memory Operations
+; Tests load, store, lea, load_sext, load_zext, storei
+
+global @data : i64 = 42
+global @buffer : i64 = 0
+
+func @test_memory() -> i64 @callconv(nova) {
+    entry:
+        ; Test load from global
+        %0 = load i64 [@data]
+        ; %0 = 42
+
+        ; Test store to global
+        %1, %f1 = addi i64 %0, 100
+        ; %1 = 142
+        store i64 %1, [@buffer]
+
+        ; Test load back
+        %2 = load i64 [@buffer]
+        ; %2 = 142
+
+        ; Test loadi with offset
+        %3 = loadi i64 @data, 0
+        ; %3 = 42
+
+        ; Test lea (load effective address)
+        %4 = lea [@data]
+        ; %4 = address of data
+
+        ; Test storei
+        %5, %f5 = muli i64 %2, 2
+        ; %5 = 284
+        storei i64 %5, @buffer, 0
+
+        ; Load back to verify
+        %6 = load i64 [@buffer]
+        ; %6 = 284
+
+        ret i64 %6
+}

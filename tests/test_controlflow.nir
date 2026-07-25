@@ -1,0 +1,27 @@
+; Test: Control Flow
+; Tests loops, conditionals, and phi nodes
+
+func @control_flow_test() -> i64 @callconv(nova) {
+    entry:
+        %0, %f0 = addi i64 0, 10
+        %1, %f1 = addi i64 0, 0
+        br loop
+
+    loop:
+        %2 = phi i64 [%0, entry], [%3, loop]
+        %acc = phi i64 [%1, entry], [%4, loop]
+
+        ; Decrement counter
+        %3, %f3 = subi i64 %2, 1
+        ; Accumulate: acc + counter
+        %4, %f4 = add i64 %acc, %2
+
+        ; Check if counter == 0
+        %done, %fdone = subi i64 %2, 0
+        %is_done = test_eq %fdone
+
+        br_cond %is_done, done, loop
+
+    done:
+        ret i64 %acc
+}

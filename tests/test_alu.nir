@@ -1,0 +1,62 @@
+; Test: Arithmetic and Logic Operations
+; Tests all R-type and I-type arithmetic instructions
+
+func @test_alu() -> i64 @callconv(nova) {
+    entry:
+        ; Test addition
+        %0, %f0 = addi i64 0, 10
+        %1, %f1 = addi i64 0, 20
+        %2, %f2 = add i64 %0, %1
+        ; %2 = 30
+
+        ; Test subtraction
+        %3, %f3 = subi i64 %2, 5
+        ; %3 = 25
+
+        ; Test multiplication
+        %4, %f4 = muli i64 %3, 4
+        ; %4 = 100
+
+        ; Test bitwise AND
+        %5, %f5 = andi i64 %4, 255
+        ; %5 = 100
+
+        ; Test bitwise OR
+        %6, %f6 = ori i64 %5, 256
+        ; %6 = 356
+
+        ; Test bitwise XOR
+        %7, %f7 = xori i64 %6, 256
+        ; %7 = 100
+
+        ; Test shift left
+        %8, %f8 = shli i64 %7, 2
+        ; %8 = 400
+
+        ; Test shift right
+        %9, %f9 = shri i64 %8, 2
+        ; %9 = 100
+
+        ; Test division
+        %10, %f10 = addi i64 0, 100
+        %11, %f11 = addi i64 0, 3
+        %12 = div i64 %10, %11
+        ; %12 = 33
+
+        ; Test remainder
+        %13 = rem i64 %10, %11
+        ; %13 = 1
+
+        ; Test negation
+        %14, %f14 = neg i64 %9
+        ; %14 = -100
+
+        ; Test not
+        %15, %f15 = not i64 %14
+        ; %15 = 99
+
+        ; Final result: 100 + 33 + 1 = 134
+        %16, %f16 = add i64 %9, %12
+        %17, %f17 = add i64 %16, %13
+        ret i64 %17
+}
