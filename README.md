@@ -172,6 +172,18 @@ fn main() -> i64 {
 cargo test
 ```
 
+## Contributing
+
+Contributions are welcome! Whether it's bug fixes, new features, documentation improvements, or
+new target backends — we'd love your help.
+
+- **Report bugs** or **request features** via [GitHub Issues](https://github.com/aaaaaswe/nova-compiler/issues)
+- **Submit PRs**: fork the repo, create a branch, and open a pull request
+- **Add a backend**: implement `crate::native::YourArch` following the pattern in `nova-codegen/src/native/`
+- **Improve the language**: extend the parser in `nova-frontend/src/parser.rs` and lower in `nova-hir/`
+
+All contributions are reviewed. Let's build a great compiler together!
+
 ## License
 
 MIT
