@@ -243,6 +243,10 @@ dependencies = [
 name = "nova-ffi"
 version = "0.1.0"
 dependencies = [
+ "nova-codegen",
+ "nova-frontend",
+ "nova-hir",
+ "nova-mir",
  "nova-nir",
  "thiserror",
 ]

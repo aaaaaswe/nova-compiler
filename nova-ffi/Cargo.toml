@@ -7,4 +7,8 @@ authors.workspace = true
 
 [dependencies]
 nova-nir = { path = "../nova-nir" }
+nova-frontend = { path = "../nova-frontend" }
+nova-hir = { path = "../nova-hir" }
+nova-mir = { path = "../nova-mir" }
+nova-codegen = { path = "../nova-codegen" }
 thiserror.workspace = true

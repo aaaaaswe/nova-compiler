@@ -1,0 +1,16 @@
+# Nova example: Simple arithmetic
+# Demonstrates basic integer operations
+
+fn add(a: i64, b: i64) -> i64 {
+    return a + b;
+}
+
+fn mul(a: i64, b: i64) -> i64 {
+    return a * b;
+}
+
+fn main() -> i64 {
+    var x: i64 = add(10, 20);
+    var y: i64 = mul(x, 2);
+    return y;  // Should return 60
+}
