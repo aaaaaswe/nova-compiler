@@ -186,4 +186,5 @@ All contributions are reviewed. Let's build a great compiler together!
 
 ## License
 
-MIT
+See [LICENSE](LICENSE). Non-commercial use, modification, and distribution allowed.
+Redistribution must not use the project name.
