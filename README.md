@@ -186,4 +186,4 @@ All contributions are reviewed. Let's build a great compiler together!
 
 ## License
 
-[CC BY-NC 4.0](LICENSE) — 署名-非商业性使用 4.0 国际
+Nova Compiler License
