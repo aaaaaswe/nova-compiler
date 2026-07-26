@@ -9,11 +9,11 @@ A programming language and compiler toolchain for the [MacroCore-X](https://gith
 - **Nova Language** — C-like syntax for systems programming: functions, variables, loops, conditionals
 - **Three Codegen Modes** — Pure RISC, Pure CISC, RISC/CISC Hybrid (default)
 - **Multi-Language Frontend** — Nova / C / C++ / Rust / Assembly / NIR via `nova-ffi`
-- **Cross-Compilation** — MCU, Workstation, and PC targets
+- **Cross-Compilation** — MacroCore-X (MCU/Workstation/PC) + native (x86_64, aarch64, x86, arm)
 - **Custom NIR** — Novel Intermediate Representation with 126 instructions across 13 categories
 - **Full Pipeline** — Frontend → HIR → MIR → NIR → Codegen → Assembly → Link
 - **Simulator** — Built-in MacroCore-X ISA simulator (compile and run in one step)
-- **Python Helpers** — Convenience scripts wrapping the compiler tools
+- **Pure Rust** — No scripting language dependencies; single binary `novac` for all targets
 
 ## Architecture
 
@@ -40,13 +40,14 @@ A programming language and compiler toolchain for the [MacroCore-X](https://gith
 │   nova-nir    │  NIR IR (opt: DCE, constant folding, BB merging)
 └──────┬───────┘
        │
-       ├──→ nova-codegen (risc) ──→ Pure RISC
-       ├──→ nova-codegen (cisc) ──→ Pure CISC
-       └──→ nova-codegen (hybrid) → RISC/CISC hybrid
+       ├──→ nova-codegen (risc)   ──→ MacroCore-X Pure RISC
+       ├──→ nova-codegen (cisc)   ──→ MacroCore-X Pure CISC
+       ├──→ nova-codegen (hybrid) ──→ MacroCore-X RISC/CISC hybrid
+       └──→ nova-codegen (native) ──→ x86_64 / aarch64 / x86 / arm
                 │
                 ▼
        ┌──────────────┐
-       │   nova-asm    │  Two-pass assembler
+       │   nova-asm    │  MacroCore-X two-pass assembler
        └──────┬───────┘
               │
               ▼
@@ -63,7 +64,7 @@ A programming language and compiler toolchain for the [MacroCore-X](https://gith
 | `nova-hir` | High-level IR, type checking |
 | `nova-mir` | Mid-level IR, control flow graphs |
 | `nova-nir` | Low-level IR (NIR), optimizer |
-| `nova-codegen` | Code generation (RISC/CISC/Hybrid), register allocation |
+| `nova-codegen` | Code generation (RISC/CISC/Hybrid/Native), register allocation |
 | `nova-asm` | MacroCore-X assembler |
 | `nova-sim` | MacroCore-X ISA simulator |
 | `nova-link` | Linker (ELF / binary output) |
@@ -75,7 +76,6 @@ A programming language and compiler toolchain for the [MacroCore-X](https://gith
 ### Requirements
 
 - Rust 1.70+
-- Python 3.10+ (optional, for helper scripts)
 
 ### Build
 
@@ -87,10 +87,12 @@ cargo build
 
 ### Usage
 
-**Rust CLI (`novac`):**
+**Compile Nova source:**
 
 ```bash
-# Compile Nova source to binary
+# ── MacroCore-X targets ──
+
+# Compile to binary
 ./target/debug/novac hello.nova -o hello.bin --target pc
 
 # Compile and run in simulator
@@ -104,34 +106,22 @@ cargo build
 ./target/debug/novac hello.nova --target pc --codegen cisc
 ./target/debug/novac hello.nova --target pc --codegen hybrid  # default
 
-# Compile C source
+# ── Native cross-compilation ──
+
+# Emit x86_64 assembly
+./target/debug/novac hello.nova --target x86_64 -S -o hello_x64.s
+
+# Emit aarch64/ARM64 assembly
+./target/debug/novac hello.nova --target aarch64 -S -o hello_arm64.s
+
+# Emit x86 32-bit assembly
+./target/debug/novac hello.nova --target x86 -S -o hello_x86.s
+
+# Emit ARM32 assembly
+./target/debug/novac hello.nova --target arm -S -o hello_arm.s
+
+# Compile C source (MacroCore-X only)
 CC=gcc ./target/debug/novac hello.c --target pc -o hello.bin
-```
-
-**Python helpers (`novatool`):**
-
-```bash
-# Compile
-python3 scripts/novatool.py compile hello.nova -o hello.bin --target pc
-
-# Compile + simulate
-python3 scripts/novatool.py run hello.nova --target pc
-
-# Assemble
-python3 scripts/novatool.py assemble program.asm -o program.bin
-
-# Simulate
-python3 scripts/novatool.py simulate hello.bin
-
-# Show toolchain info
-python3 scripts/novatool.py info
-```
-
-Or via the shell wrapper:
-
-```bash
-./novatool compile hello.nova -o hello.bin --target pc
-./novatool run hello.nova --target pc
 ```
 
 ### Nova Language Example
@@ -149,8 +139,6 @@ fn main() -> i64 {
 }
 ```
 
-More examples in [scripts/examples/](scripts/examples/).
-
 ## Codegen Modes
 
 | Mode | Description | Use Case |
@@ -161,11 +149,22 @@ More examples in [scripts/examples/](scripts/examples/).
 
 ## Target Platforms
 
+### MacroCore-X Targets
+
 | Target | Format | Base Address | Notes |
 |--------|--------|-------------|-------|
 | `mcu` | Binary | 0x08000000 | RISC-first, small memory |
-| `workstation` | ELF | 0x00000000 | Hybrid, CISC + FP enabled |
+| `workstation` | ELF | 0x00400000 | Hybrid, CISC + FP enabled |
 | `pc` | Binary | 0x00001000 | Hybrid, general purpose |
+
+### Native Cross-Compilation Targets
+
+| Target | Arch | Width | Assembler | Linker |
+|--------|------|-------|-----------|--------|
+| `x86_64` | AMD64 | 64-bit | `as` | `ld` |
+| `aarch64` | ARM64 | 64-bit | `aarch64-linux-gnu-as` | `aarch64-linux-gnu-ld` |
+| `x86` | IA-32 | 32-bit | `as` | `ld` |
+| `arm` | ARM32 | 32-bit | `arm-linux-gnueabihf-as` | `arm-linux-gnueabihf-ld` |
 
 ## Running Tests
 

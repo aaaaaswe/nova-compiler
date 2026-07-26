@@ -1,1 +1,0 @@
-# Nova Compiler Toolchain - Python Helper Scripts
