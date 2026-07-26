@@ -175,4 +175,4 @@ cargo test
 
 ## 许可证
 
-MIT
+Nova Compiler License
