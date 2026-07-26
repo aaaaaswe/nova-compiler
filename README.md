@@ -186,5 +186,4 @@ All contributions are reviewed. Let's build a great compiler together!
 
 ## License
 
-See [LICENSE](LICENSE). Non-commercial use, modification, and distribution allowed.
-Redistribution must not use the project name.
+[CC BY-NC 4.0](LICENSE) — 署名-非商业性使用 4.0 国际
