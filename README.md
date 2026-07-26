@@ -186,4 +186,4 @@ All contributions are reviewed. Let's build a great compiler together!
 
 ## License
 
-MIT
+Nova Compiler License
