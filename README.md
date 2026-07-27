@@ -2,7 +2,6 @@
 
 A programming language and compiler toolchain for the [MacroCore-X](https://github.com/aaaaaswe/MacroCore-X) instruction set. Built entirely in Rust, zero LLVM dependency.
 
-> [中文文档](README_CN.md)
 
 ## Features
 
